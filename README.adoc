@@ -1,0 +1,26 @@
+= WeatherMap
+
+A weather search application with WinForms.  
+Tells you the weather selected on Map.
+
+image::https://user-images.githubusercontent.com/38149771/52105980-345a5180-2634-11e9-8f60-698ad44d16d9.png[]
+
+== How to build
+Replace 2 items with your API key.
+
+[source,html]
+.Map.html
+----
+<script src="https://map.yahooapis.jp/js/V1/jsapi?appid=MAP_API_KEY"></script>
+<!-- Replace MAP_API_KEY with your YOLP API Key -->
+----
+
+[source,cs]
+.Weather.cs
+----
+public class Weather
+{
+    private static string key = "Weather API Key";
+    // Replace Weather API Key with your OpenWeatherMap API Key
+}
+----
