@@ -23,6 +23,8 @@ namespace Mapkarajouhou
         public BookmarkForm()
         {
             InitializeComponent();
+            
+            Result = BookmarkFormResult.CANCEL;
         }
 
         private void addButton_Click(object sender, EventArgs e)
