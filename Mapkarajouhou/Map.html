@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>map</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+        }
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://map.yahooapis.jp/js/V1/jsapi?appid=MAP_API_KEY"></script>
+    <script>
+        var map 
+        window.onload = function () {
+            map = new Y.Map("map");
+            map.drawMap(new Y.LatLng(38.90, 141.18), 7, Y.LayerSetId.NORMAL);
+
+            map.addControl(new Y.CenterMarkControl());
+            map.addControl(new Y.LayerSetControl());
+            map.addControl(new Y.ScaleControl());
+            map.addControl(new Y.SliderZoomControlVertical());
+        };
+
+        window.onresize = function () {
+            map.updateSize();
+        };
+
+        function sendLatToCS() {
+            var latlng = map.getCenter();
+
+            return latlng.Lat.toString();
+        }
+
+        function sendLngToCS() {
+            var latlng = map.getCenter();
+
+            return latlng.Lon.toString();
+        }
+
+        function setMapCenter(lat, lng){
+            var latlng = new Y.LatLng(lat, lng);
+
+            map.setCenter(latlng);
+        }
+    </script>
+</body>
+</html>
