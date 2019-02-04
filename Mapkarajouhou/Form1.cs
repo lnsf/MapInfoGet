@@ -1,7 +1,6 @@
 ﻿using CefSharp.WinForms;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -19,7 +18,7 @@ namespace Mapkarajouhou
         {
             InitializeComponent();
 
-            var browser = new ChromiumWebBrowser("file:///" + Directory.GetCurrentDirectory().Replace('\\', '/') + "/Map.html");
+            var browser = new ChromiumWebBrowser($"file:///{Directory.GetCurrentDirectory().Replace('\\', '/')}/Map.html");
 
             leftTableLayout.Controls.Add(browser, 0, 0);
 
@@ -39,7 +38,7 @@ namespace Mapkarajouhou
             SetBookmarkMenu();
         }
 
-        private void searchButton_Click(object sender, EventArgs e)
+        private void SearchButtonClicked(object sender, EventArgs e)
         {
             searchButton.Enabled = false;
 
@@ -47,7 +46,7 @@ namespace Mapkarajouhou
 
             weather = Weather.GetWeatherFromWeb(l);
 
-            if(weather == null)
+            if (weather == null)
             {
                 searchButton.Enabled = true;
                 return;
@@ -58,7 +57,7 @@ namespace Mapkarajouhou
             searchButton.Enabled = true;
         }
 
-        private void bookmarkMenuItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void BookmarkMenuItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             var clickedText = e.ClickedItem.Text;
 
@@ -78,32 +77,7 @@ namespace Mapkarajouhou
             map.SetLocation(location);
         }
 
-        private void tweetButton_Click(object sender, EventArgs e)
-        {
-            if(weather == null)
-            {
-                MessageBox.Show("場所をマップで検索してからもう一度お試しください。");
-
-                return;
-            }
-
-            var tweetStr =
-                WebUtility.UrlEncode(
-                    string.Format(
-                    "{0}の天気\n" +
-                    "{1} --- {2}\n\n" +
-                    "気温：{3}℃\n" +
-                    "湿度：{4}%\n" +
-                    "気圧：{5}hPa", weather.Name, weather.Main,
-                    weather.Description, weather.Temp, weather.Humidity, weather.Pressure));
-
-            var url = string.Format("https://twitter.com/intent/tweet?text={0}", tweetStr);
-
-            // ブラウザを起動
-            Process.Start(url);
-        }
-
-        private void weatherButton_Click(object sender, EventArgs e)
+        private void TweetButtonClicked(object sender, EventArgs e)
         {
             if (weather == null)
             {
@@ -112,23 +86,37 @@ namespace Mapkarajouhou
                 return;
             }
 
-            string url = "";
+            var tweetStr =
+                WebUtility.UrlEncode(
+                    $"{weather.Name}の天気\n" +
+                    $"{weather.Main} --- {weather.Description}\n\n" +
+                    $"気温：{weather.Temp}℃\n" +
+                    $"湿度：{weather.Humidity}%\n" +
+                    $"気圧：{weather.Pressure}hPa");
 
-            if(weather.CityId == "0")
+            var url = $"https://twitter.com/intent/tweet?text={tweetStr}";
+
+            // ブラウザを起動
+            Process.Start(url);
+        }
+
+        private void WeatherButtonClicked(object sender, EventArgs e)
+        {
+            if (weather == null)
             {
-                var baseUrl = "https://openweathermap.org/weathermap";
-                url = string.Format("{0}?lat={1}&lon={2}&zoom=5", baseUrl, weather.Lat, weather.Lng);
+                MessageBox.Show("場所をマップで検索してからもう一度お試しください。");
+
+                return;
             }
-            else
-            {
-                var baseUrl = "https://openweathermap.org/city";
-                url = string.Format("{0}/{1}",baseUrl, weather.CityId);
-            }
+
+            string url = weather.CityId == "0"
+                ? $"https://openweathermap.org/weathermap?lat={weather.Lng}&lon={2}&zoom=5"
+                : $"https://openweathermap.org/city/{weather.CityId}";
 
             Process.Start(url);
         }
 
-        private void bookmarkButton_Click(object sender, EventArgs e)
+        private void BookmarkButtonClicked(object sender, EventArgs e)
         {
             var form = new BookmarkForm();
             var location = map.GetLocation();

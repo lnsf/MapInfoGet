@@ -24,7 +24,7 @@ namespace Mapkarajouhou
 
         public void SetLocation(Location location)
         {
-            Browser.GetBrowser().GetFrame("").ExecuteJavaScriptAsync(string.Format("setMapCenter({0}, {1})",location.Lat, location.Lng));
+            Browser.GetBrowser().GetFrame("").ExecuteJavaScriptAsync($"setMapCenter({location.Lat}, {location.Lng})");
         }
     }
 }

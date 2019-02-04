@@ -1,21 +1,21 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
 using System.Windows.Forms;
+
 namespace Mapkarajouhou
 {
     public partial class Form1 : Form
     {
         private BookmarkedCity ReadBookmark()
         {
-            string filePath = Directory.GetCurrentDirectory() + "\\bookmark.json";
-            string readText = "";
+            string filePath = $"{Directory.GetCurrentDirectory()}\\bookmark.json";
 
             if (!File.Exists(filePath))
             {
                 File.WriteAllText(filePath, "{\"Cities\":[]}");
             }
 
-            readText = File.ReadAllText(filePath);
+            string readText = File.ReadAllText(filePath);
 
             return JsonConvert.DeserializeObject<BookmarkedCity>(readText);
 
@@ -48,8 +48,6 @@ namespace Mapkarajouhou
                     bookmark.Cities.RemoveAt(i);
 
                     SetBookmarkMenu();
-
-                    return;
                 }
 
                 return;
@@ -63,14 +61,14 @@ namespace Mapkarajouhou
             weatherText.Items.Clear();
 
             string[] text = {
-                string.Format("選択地点： {0}",weather.Name),
+                $"選択地点： {weather.Name}",
                 "",
-                string.Format("天気： {0}",weather.Main),
-                string.Format("詳細： {0}",weather.Description),
+                $"天気： {weather.Main}",
+                $"詳細： {weather.Description}",
                 "",
-                string.Format("気温： {0}℃",weather.Temp),
-                string.Format("湿度： {0}%",weather.Humidity),
-                string.Format("気圧： {0}hPa",weather.Pressure),
+                $"気温： {weather.Temp}℃",
+                $"湿度： {weather.Humidity}%",
+                $"気圧： {weather.Pressure}hPa",
             };
 
             foreach (var t in text)
@@ -78,7 +76,7 @@ namespace Mapkarajouhou
                 weatherText.Items.Add(t);
             }
 
-            weatherPicture.ImageLocation = string.Format("http://openweathermap.org/img/w/{0}.png", weather.Icon);
+            weatherPicture.ImageLocation = $"http://openweathermap.org/img/w/{weather.Icon}.png";
         }
 
         private void AddBookmark(BookmarkedCity.City city)

@@ -7,17 +7,17 @@ namespace Mapkarajouhou
 {
     public class Weather
     {
-        private static string key = "Weather API Key";
+        private static readonly string key = "Weather API Key";
 
         private Weather(JObject jobj)
         {
-            Func<string, string> ConvertKToC = (string k) =>
+            string ConvertKToC(string k)
             {
                 var k_float = float.Parse(k);
                 var c_float = k_float - 273.15;
-                var c = string.Format("{0:F0}", c_float);
+                var c = $"{c_float:F0}";
                 return c;
-            };
+            }
 
             var weather = jobj["weather"][0];
             Main = weather["main"].ToString();
@@ -56,7 +56,7 @@ namespace Mapkarajouhou
             {
                 return
                     name == "" ?
-                    string.Format("(緯度:{0} 経度:{1})", Lat, Lng) :
+                    $"(緯度:{Lat} 経度:{Lng})" :
                     name;
             }
             set { name = value; }
@@ -65,9 +65,7 @@ namespace Mapkarajouhou
 
         public static Weather GetWeatherFromWeb(Location lcn)
         {
-            string baseUrl = "http://api.openweathermap.org/data/2.5/weather";
-
-            string url = string.Format("{0}?APPID={1}&lat={2}&lon={3}", baseUrl, key, lcn.Lat, lcn.Lng);
+            string url = $"http://api.openweathermap.org/data/2.5/weather?APPID={key}&lat={lcn.Lat}&lon={lcn.Lng}";
 
             try
             {
@@ -87,6 +85,4 @@ namespace Mapkarajouhou
             return null;
         }
     }
-
-
 }
